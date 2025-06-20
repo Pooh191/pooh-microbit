@@ -1,4 +1,433 @@
-<link rel="shortcut icon" href="favicon.ico" type="https://www.swk13.site/img/logo/SWK-LogoNoBG.png">
-ลิ้งค์ไปหน้าต่างๆ<br>
-<a href="Micro-bit/index.html">ลงระบบตอนซ้อม</a> <br>
-<a href="kmitl/index.html">ลงระบบตอนไปแข่ง kmitl</a>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงทะเบียน SWK | Luxury Edition</title>
+    <link rel="shortcut icon" href="https://www.swk13.site/img/logo/SWK-LogoNoBG.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #7c4dff;
+            --secondary: #ff4081;
+            --secondary-light: #ff80ab;
+            --accent: #40c4ff;
+            --gold: #ffd700;
+            --platinum: #e5e4e2;
+            --dark: #121212;
+            --light: #ffffff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            min-height: 100vh;
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem;
+            position: relative;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(126, 87, 194, 0.5);
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            padding: 15px;
+            transition: transform 0.8s ease;
+        }
+        
+        .logo:hover {
+            transform: rotateY(180deg);
+        }
+        
+        .logo-glow {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            animation: pulse 4s infinite alternate;
+            z-index: 1;
+            filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(64, 196, 255, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+        
+        .card {
+            background: linear-gradient(145deg, rgba(40,40,40,0.8), rgba(70,70,70,0.4));
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            width: 380px;
+            min-height: 450px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255,255,255,0.05) 0%,
+                rgba(255,255,255,0) 50%,
+                rgba(255,255,255,0.05) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .gold-border {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, var(--gold), var(--platinum), var(--gold));
+            border-image-slice: 1;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 2;
+            animation: borderGlow 4s infinite linear;
+        }
+        
+        .card-header {
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(to right, rgba(94, 53, 177, 0.3), rgba(126, 87, 194, 0.2));
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+        }
+        
+        .card-header h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .card-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--accent);
+        }
+        
+        .card-body {
+            padding: 2.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            flex-grow: 1;
+        }
+        
+        .btn-container {
+            margin-top: auto;
+            text-align: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.4s ease;
+            border: none;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(94, 53, 177, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(94, 53, 177, 0.7);
+        }
+        
+        .btn:hover i {
+            transform: scale(1.2);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, var(--secondary), var(--secondary-light));
+            box-shadow: 0 10px 25px rgba(255, 64, 129, 0.5);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 15px 35px rgba(255, 64, 129, 0.7);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255,255,255,0.6);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+        
+        .footer-glow {
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary-light), transparent);
+            box-shadow: 0 0 15px var(--primary-light);
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+            100% { opacity: 0.3; transform: scale(0.9); }
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .card-container {
+                gap: 2rem;
+            }
+            
+            .card {
+                width: 350px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .logo {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <img src="https://www.swk13.site/img/logo/SWK-LogoNoBG.png" alt="SWK Logo" class="logo">
+            </div>
+            <h1>ระบบลงทะเบียน SWK</h1>
+            <p class="subtitle">ระบบลงทะเบียนระดับ Luxury สำหรับทีม SWK ด้วยเทคโนโลยีล้ำสมัยและการออกแบบที่หรูหรา</p>
+        </header>
+        
+        <div class="card-container">
+            <div class="card">
+                <div class="gold-border"></div>
+                <div class="card-header">
+                    <h2><i class="fas fa-crown"></i> ลงทะเบียนซ้อม</h2>
+                </div>
+                <div class="card-body">
+                    <p>ระบบลงทะเบียนการซ้อมระดับพรีเมียม พร้อมระบบติดตามผลและวิเคราะห์ประสิทธิภาพของทีมอย่างละเอียด ด้วยเทคโนโลยีล่าสุดที่ออกแบบมาเฉพาะสำหรับทีม SWK</p>
+                    <div class="btn-container">
+                        <a href="Micro-bit/index.html" class="btn">
+                            <i class="fas fa-gem"></i> ลงทะเบียนซ้อม
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="gold-border"></div>
+                <div class="card-header" style="background: linear-gradient(to right, rgba(255, 64, 129, 0.3), rgba(255, 128, 171, 0.2));">
+                    <h2><i class="fas fa-trophy"></i> ลงทะเบียนแข่งขัน</h2>
+                </div>
+                <div class="card-body">
+                    <p>ระบบลงทะเบียนการแข่งขันระดับไฮเอนด์ พร้อมระบบสถิติและรายงานผลการแข่งขันแบบเรียลไทม์ ที่ออกแบบมาเพื่อความสำเร็จของทีม SWK</p>
+                    <div class="btn-container">
+                        <a href="kmitl/index.html" class="btn btn-secondary">
+                            <i class="fas fa-medal"></i> ลงทะเบียนแข่งขัน
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-glow"></div>
+            <p>© 2023 ทีม SWK | ผลงานการออกแบบระดับ Luxury Premium</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create stars
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random properties
+                const size = Math.random() * 3;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = 2 + Math.random() * 5 + 's';
+                const delay = Math.random() * 5 + 's';
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.setProperty('--duration', duration);
+                star.style.animationDelay = delay;
+                star.style.opacity = Math.random();
+                
+                starsContainer.appendChild(star);
+            }
+        });
+    </script>
+</body>
+</html>
